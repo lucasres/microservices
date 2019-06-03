@@ -1,1 +1,5 @@
 order/node_modules/
+api_shop/venv
+*.pyc
+ap
+api_shop/db.sqlite3

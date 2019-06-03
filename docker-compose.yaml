@@ -22,9 +22,16 @@ services:
       - "3000:3000"
     depends_on:
       - rabbitmq
-  
-  
-
+    
+  api_shop:
+    build: ./api_shop/
+    command: python manage.py runserver
+    volumes:
+      - ./api_shop/:/code/
+    ports:
+      - 8000:8000
+    depends_on:
+      - rabbitmq
 
 volumes:
   rabbitmq_data:
