@@ -3,3 +3,4 @@ api_shop/venv
 *.pyc
 ap
 api_shop/db.sqlite3
+order/package-lock.json

@@ -11,6 +11,7 @@ amqp.connect('amqp://root:toor@rabbitmq:5672',(err,conn)=>{
         console.log(' [x] Awaiting RPC requests');1
 
         ch.consume(q,function reply(msg){
+            console.log(JSON.parse(msg.content.toString()));
             //faz o parse pois recebe como buffer
             const id = parseInt(msg.content.toString(), 10);
             //loga que recebeu
