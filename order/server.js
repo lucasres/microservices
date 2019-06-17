@@ -11,11 +11,21 @@ amqp.connect('amqp://root:toor@rabbitmq:5672',(err,conn)=>{
         console.log(' [x] Awaiting RPC requests');1
 
         ch.consume(q,function reply(msg){
-            console.log(JSON.parse(msg.content.toString()));
             //faz o parse pois recebe como buffer
-            const id = parseInt(msg.content.toString(), 10);
+            let data = JSON.parse(msg.content.toString());
             //loga que recebeu
-            console.log(`Recived message [.] ID ${id}`);
+            console.log(data);
+            //print no servidor
+            console.log(`Recived message [.] ID ${msg.properties.correlationId}`);
+            //realaiza o pagamento fake
+            setTimeout(()=>{
+                console.log('Realizando pagamento:');
+                console.log(`Cartao.:${data.num_card}`);
+                console.log(`Cvv....:${data.cvv}`);
+                console.log(`Valor..:${data.value}`);
+                console.log(`Pagamento aprovado [OK]`);
+                
+            },2500);
             //devolve a mensagem
             ch.sendToQueue(msg.properties.replyTo,
                 new Buffer('name: Lucas, teste: Hello'),
