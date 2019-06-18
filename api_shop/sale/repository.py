@@ -1,6 +1,7 @@
 import json
 import pika
 import uuid
+from rpc.rpc_queues import RcpOrder
 
 class SalesRepository():
     """
@@ -32,26 +33,11 @@ class SalesRepository():
             'cvv':sale['cvv'],
             'value':sale['value_total']
         }
-        #gera o correlation_id
-        correlation_id = str(uuid.uuid4())
         #corpo da RPC
         data = json.dumps(data)        
-        #inicia a conexao
-        conn = pika.BlockingConnection(
-            pika.URLParameters('amqp://root:toor@rabbitmq:5672')
-        )
-        #instancia o channel
-        channel = conn.channel()
-        channel.basic_publish(
-            exchange='',
-            routing_key='rpc_qeue',
-            properties=pika.BasicProperties(
-                reply_to='',
-                correlation_id=correlation_id,
-            ),
-            body=data
-        )
-
+        #rcp
+        rcp = RcpOrder()
+        rcp.call(data)
 
     @classmethod
     def value_sale(cls,itens):
