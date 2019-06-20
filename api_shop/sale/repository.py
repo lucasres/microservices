@@ -32,9 +32,7 @@ class SalesRepository():
             'num_card':sale['num_card'],
             'cvv':sale['cvv'],
             'value':sale['value_total']
-        }
-        #corpo da RPC
-        data = json.dumps(data)        
+        }     
         #rcp
         rcp = RcpOrder()
         rcp.call(data)

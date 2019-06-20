@@ -2,8 +2,9 @@ import pika
 import uuid
 import json
 import time
+from threading import Thread
 
-class RpcInterface(object):
+class RpcInterface(Thread):
     host = None
     queue = None
 
@@ -17,12 +18,7 @@ class RpcInterface(object):
         #declara a queue criando se for necessario
         result = self.channel.queue_declare(queue='', exclusive=True)
         self.callback_queue = result.method.queue
-        #inicia o consumo da queue para o processo do retorno da chamada
-        self.channel.basic_consume(
-            queue=self.callback_queue,
-            on_message_callback=self.on_response,
-            auto_ack=True
-        )
+        super().__init__()
 
     def on_response(self, ch, method, props, body):
         #verifica se a mensagem foi para este consumer
@@ -43,15 +39,18 @@ class RpcInterface(object):
             ),
             body=json.dumps(body)
         )
-        #espera pela resposta
-        while self.response is None:
-            self.connection.process_data_events()
-            time.sleep(0.1)
-        #imprime que deu certo
-        self.handle_response(self.response)
     
     def handle_response(self,data):
         """
         Metodo que lida com o retorno da response
         """
         raise NotImplementedError()
+    
+    def run(self):
+        #inicia o consumo da queue para o processo do retorno da chamada
+        self.channel.basic_consume(
+            queue=self.callback_queue,
+            on_message_callback=self.on_response,
+            auto_ack=True
+        )
+        print('\n\n\n\n caiu aqui')
