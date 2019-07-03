@@ -13,24 +13,42 @@ services:
       RABBITMQ_DEFAULT_PASS: "toor"
       RABBITMQ_DEFAULT_VHOST: "/"
   
-  order_payer:
-    build: ./order/
+  # order_payer:
+  #   build: ./order/
+  #   command: npm run dev
+  #   volumes:
+  #     - ./order:/app/
+  #   ports:
+  #     - "3000:3000"
+  #   depends_on:
+  #     - rabbitmq
+    
+  # api_shop:
+  #   build: ./api_shop/
+  #   #command: gunicorn api_shop.wsgi:application -b 0.0.0.0:8000  --workers 3 --log-level=info
+  #   command: python manage.py runserver 0.0.0.0:8000
+  #   volumes:
+  #     - ./api_shop/:/code/
+  #   ports:
+  #     - 8000:8000
+  #   depends_on:
+  #     - rabbitmq
+  
+  api_shop:
+    build: ./api_sale/
     command: npm run dev
     volumes:
-      - ./order:/app/
+      - ./api_sale:/app/
     ports:
       - "3000:3000"
     depends_on:
       - rabbitmq
-    
-  api_shop:
-    build: ./api_shop/
-    #command: gunicorn api_shop.wsgi:application -b 0.0.0.0:8000  --workers 3 --log-level=info
-    command: python manage.py runserver 0.0.0.0:8000
+  
+  worker_payer:
+    build: ./worker_payer/
+    command: npm run dev
     volumes:
-      - ./api_shop/:/code/
-    ports:
-      - 8000:8000
+      - ./worker_payer:/app/
     depends_on:
       - rabbitmq
 

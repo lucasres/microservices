@@ -1,6 +1,9 @@
 order/node_modules/
+api_sale/node_modules/
+worker_payer/node_modules/
 api_shop/venv
 *.pyc
 ap
 api_shop/db.sqlite3
 order/package-lock.json
+.vscode/settings.json
