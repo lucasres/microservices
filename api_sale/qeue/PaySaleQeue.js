@@ -32,10 +32,9 @@ module.exports = {
         amqp.connect(process.env.BROKER_URL,(err,conn)=>{
             conn.createChannel((err,ch)=>{
                 let q = process.env.QEUE_REQUEST;
-                let routingKey = process.env.ROUTING_KEY_REQUEST;
                 ch.sendToQueue(q,Buffer.from(JSON.stringify(msg)),{
-                    correlationId:uuid(),
-                    replyTo:process.env.QEUE_RESULTS
+                    correlationId:uuid(), //id unico
+                    replyTo:process.env.QEUE_RESULTS //fila para onde a resposta deve ir
                 });
                 console.log(`[*] Send Message to ${q}`);
                 
