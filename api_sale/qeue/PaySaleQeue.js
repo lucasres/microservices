@@ -37,7 +37,6 @@ module.exports = {
                     replyTo:process.env.QEUE_RESULTS //fila para onde a resposta deve ir
                 });
                 console.log(`[*] Send Message to ${q}`);
-                
             });
         });
     },

@@ -13,6 +13,8 @@ module.exports = {
         let data = req.body;
         //calcula o valor total da compra
         let total = calc.total_venda(data.itens);
+        //envia uma msg para o servico de pagamento
+        qeueSale.sendMessage({'total':total});
         return res.json({
             'total':total
         });

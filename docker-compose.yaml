@@ -49,6 +49,7 @@ services:
     command: npm run dev
     volumes:
       - ./worker_payer:/app/
+    restart: "always"
     depends_on:
       - rabbitmq
 

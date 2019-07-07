@@ -1,5 +1,0 @@
-Django==2.0.7
-gunicorn==19.0.0
-pika==1.0.1
-uuid==1.30
-djangorestframework==3.9.4
