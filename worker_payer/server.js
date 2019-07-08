@@ -1,5 +1,7 @@
 const amqp = require('amqplib/callback_api');
 
+const utils = require('./utils');
+
 amqp.connect('amqp://root:toor@rabbitmq:5672',(err,conn)=>{
     conn.createChannel((err,ch)=>{
         const q = 'processing.request';
@@ -19,14 +21,25 @@ amqp.connect('amqp://root:toor@rabbitmq:5672',(err,conn)=>{
             console.log(data);
             //realaiza o pagamento fake
             console.log('Realizando pagamento:');
-            console.log(`Cartao.:${data.num_card}`);
-            console.log(`Cvv....:${data.cvv}`);
-            console.log(`Valor..:${data.value}`);
-            console.log(`Pagamento aprovado [OK]`);
+            console.log(`Cliente..:${data.client}`);
+            console.log(`Valor....:${data.total}`);
+            console.log(`Id.......:${data.id}`);
             
-                        //devolve a mensagem
+            const rs_pay = utils.getRndInteger(0,1);
+            console.log(rs_pay);
+            var rs_data = {}
+            if (rs_pay){
+                console.log(`Pagamento aprovado [OK]`);
+                rs_data.status = true;
+            } else {
+                console.log(`Pagamento negado [FAIL]`);
+                rs_data.status = false;
+            }
+
+            
+            //devolve a mensagem
             ch.sendToQueue(msg.properties.replyTo,
-                Buffer.from('{"status":true}'),
+                Buffer.from(JSON.stringify(rs_data)),
                 { correlationId: msg.properties.correlationId }    
             );
             
